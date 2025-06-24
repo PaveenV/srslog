@@ -3,6 +3,7 @@ package srslog
 import (
 	"crypto/tls"
 	"net"
+	"time"
 )
 
 // dialerFunctionWrapper is a simple object that consists of a dialer function
@@ -75,7 +76,7 @@ func (w *Writer) tlsDialer() (serverConn, string, error) {
 // basicDialer is the most common dialer for syslog, and supports both TCP and
 // UDP connections.
 func (w *Writer) basicDialer() (serverConn, string, error) {
-	c, err := net.Dial(w.network, w.raddr)
+	c, err := net.DialTimeout(w.network, w.raddr, 20*time.Second)
 	var sc serverConn
 	hostname := w.hostname
 	if err == nil {
